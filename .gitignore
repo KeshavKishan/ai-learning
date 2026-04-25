@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment (we create this later)
+venv/
+env/
+.venv/
+
+# Environment variables — NEVER upload these
+.env
+
+# VS Code settings
+.vscode/
+
+# Mac junk files
+.DS_Store
