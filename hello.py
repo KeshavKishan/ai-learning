@@ -1,7 +1,6 @@
-# My first Python file
-# The # symbol means this line is a comment -python ignores it
+# My first Python file — ARIA project
+# The # symbol means comment — Python ignores this line
 
-name = "AI Developer" #store a value in a variable
-print("Hello," + name) #print the value of the variable to the console
-
-print("Day 1 complete.") #second line of output
+name = "AI Developer"           # store text in a variable called name
+print("Hello, " + name)         # combine and display text
+print("ARIA project started.")  # display second line
