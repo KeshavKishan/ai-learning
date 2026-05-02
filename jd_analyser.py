@@ -62,42 +62,45 @@ Job Description:
     return response.choices[0].message.content
 
 
-def main():
-    # Sample job description to test with
-    # Later this will be replaced by real user input
-    sample_jd = """
-    Job Title: AI Engineer
-    Company: TechCorp India
-    Location: Pune, India (Hybrid)
-
-    We are looking for an AI Engineer to join our growing team.
-    You will build and deploy AI-powered applications using LLMs,
-    RAG systems, and modern AI frameworks.
-
-    Requirements:
-    - 2+ years of experience in Python
-    - Experience with LangChain or similar frameworks
-    - Knowledge of RAG systems and vector databases
-    - FastAPI or similar backend framework
-    - Docker and basic cloud deployment
-    - Strong prompt engineering skills
-    - HuggingFace experience is a plus
-
-    Responsibilities:
-    - Build RAG pipelines for document Q&A systems
-    - Integrate LLM APIs into production applications
-    - Optimise prompts for better AI outputs
-    - Deploy AI apps using Docker and cloud services
-    - Collaborate with product team on AI features
+def read_jd_from_file(file_path):
     """
+    Reads a job description from a .txt file.
+    Returns the text content as a string.
+    """
+    # Check if the file exists before trying to open it
+    if not os.path.exists(file_path):
+        print(f"Error: File '{file_path}' not found.")
+        print("Make sure your .txt file is in the same folder as this script.")
+        return None
 
+    # Open the file, read all text, close it automatically
+    with open(file_path, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    return content
+
+
+def main():
     print("=" * 55)
     print("         ARIA — JOB DESCRIPTION ANALYSER")
     print("=" * 55)
+
+    # Ask user which file to analyse
+    file_path = input("Enter the JD filename (e.g. sample_jd.txt): ").strip()
+
+    # Read the file
+    jd_text = read_jd_from_file(file_path)
+
+    # If file not found, stop here
+    if jd_text is None:
+        return
+
+    print()
     print("Analysing job description...")
     print()
 
-    result = analyse_job_description(sample_jd)
+    # Send to AI
+    result = analyse_job_description(jd_text)
 
     print(result)
     print()

@@ -16,3 +16,6 @@ env/
 
 # Mac junk files
 .DS_Store
+
+# JD
+*.txt
