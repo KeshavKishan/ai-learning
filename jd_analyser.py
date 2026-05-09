@@ -79,6 +79,55 @@ def read_jd_from_file(file_path):
 
     return content
 
+def analyse_skill_gap(jd_analysis, candidate_skills):
+    """
+    Takes the JD analysis result and candidate's skills.
+    Compares them and returns a skill gap report.
+    """
+
+    prompt = f"""
+You are ARIA, an expert AI career assistant.
+A candidate wants to apply for a job. Compare their skills against the job requirements.
+Respond in EXACTLY this format — no extra text:
+
+MATCHING SKILLS:
+- [skills the candidate already has that match the job]
+
+MISSING SKILLS:
+- [skills required by job that candidate does not have]
+
+PRIORITY LEARNING ORDER:
+1. [most important missing skill] — [why it's most important] — [estimated weeks to learn basics]
+2. [second most important] — [why] — [estimated weeks]
+3. [continue for all missing skills]
+
+OVERALL MATCH SCORE: [X out of 10]
+
+HONEST ASSESSMENT:
+[Two sentences — how ready is this candidate for this role right now and what is the single most important thing they should do]
+
+Job Requirements Analysis:
+{jd_analysis}
+
+Candidate's Current Skills:
+{candidate_skills}
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are ARIA, an AI career assistant. Be honest and specific. Always respond in the exact format requested."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    return response.choices[0].message.content
 
 def main():
     print("=" * 55)
@@ -100,9 +149,32 @@ def main():
     print()
 
     # Send to AI
-    result = analyse_job_description(jd_text)
+    # Send to AI — Step 1: analyse the JD
+    jd_result = analyse_job_description(jd_text)
 
-    print(result)
+    print(jd_result)
+    print()
+    print("=" * 55)
+
+    # Step 2: ask for candidate skills
+    print()
+    print("Now let's check your skill match.")
+    print("Enter your current skills separated by commas.")
+    print("Example: Python, FastAPI, Docker, SQL, REST APIs")
+    print()
+    candidate_skills = input("Your skills: ").strip()
+
+    print()
+    print("Analysing skill gap...")
+    print()
+
+    # Step 3: run skill gap analysis
+    gap_result = analyse_skill_gap(jd_result, candidate_skills)
+
+    print("=" * 55)
+    print("         ARIA — SKILL GAP ANALYSIS")
+    print("=" * 55)
+    print(gap_result)
     print()
     print("=" * 55)
     print("Analysis complete.")
